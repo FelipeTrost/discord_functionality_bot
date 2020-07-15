@@ -22,11 +22,23 @@ client.on('ready', () => {
 client.on('message', message => {
     // Ignore DMs
     // If the message doesnt come from the server we're trying to manage we just ignore it
-    if (message.channel.type = "dm" && message.guild && message.guild.id != process.env.guild_id)
-        return null;
+    if (message.channel.type = "dm" && message.guild && message.guild.id != process.env.guild_id) return;
 
-    else if (message.content.charAt(0) === "!")
+    if (message.content.charAt(0) === "!")
         handleCommand(message)
+});
+
+// Greet new members
+client.on('guildMemberAdd', async member => {
+    const guild = member.guild;
+
+    if (guild && guild.id != process.env.guild_id) return;
+
+    const greetingChannel = guild.channels.cache.get(process.env.greeting_channel_id);
+
+    greetingChannel.send(
+        `Bienvenido <@${member.id}>, para obtener acceso, dirígete al canal "welcome", y reacciona a las reglas del servidor`
+    )
 });
 
 client.on('shardError', error => {
