@@ -1,9 +1,11 @@
 const axios = require("axios");
-const terremoto = require("./earthquake.js")
+const terremoto = require("./earthquake.js");
+const ping = require('./ping')
 
 const commands = {
-    terremoto
-};
+    terremoto,
+    ping
+}
 
 module.exports = msg => {
     const command = msg.content.substr(1).toLowerCase();
