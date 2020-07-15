@@ -1,7 +1,8 @@
 const Discord = require('discord.js');
 const handleCommand = require("./commands");
 const {
-    listenWelcomeReactions
+    listenWelcomeReactions,
+    checkAllReactions
 } = require("./manage_roles/enter")
 require('dotenv').config();
 
@@ -12,7 +13,10 @@ client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
     const guild = client.guilds.cache.find(g => g.id == process.env.guild_id)
 
-    listenWelcomeReactions(guild)
+    // Here I don't await it, because it can just run in the background
+    checkAllReactions(guild);
+
+    listenWelcomeReactions(guild);
 });
 
 client.on('message', message => {
