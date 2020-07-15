@@ -14,7 +14,7 @@ const listenWelcomeReactions = async guild => {
 }
 
 const checkAllReactions = async guild => {
-    console.log('Start get all reactions');
+    console.log('Fetching all reactions');
 
     const welcomeChannel = guild.channels.cache.get(process.env.welcome_channel_id);
     const welcomeMessage = await welcomeChannel.messages.fetch(process.env.welcome_message_id);
@@ -27,9 +27,12 @@ const checkAllReactions = async guild => {
         if (!usersSeen[uid]) {
             usersSeen[uid] = true;
             const actualUser = guild.members.cache.get(uid);
-            addToRole(actualUser)
+            return addToRole(actualUser);
         }
+        return false;
     }));
+
+    console.log('Fetched and analyzed all reactions');
 }
 
 
