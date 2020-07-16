@@ -1,12 +1,15 @@
-const terremoto = require('./earthquake.js');
+const terremoto = require('./earthquake');
 const ping = require('./ping')
 const exchange = require('./currency_exchange_rate');
+const wikisearch = require('./wikipedia.js');
+
 
 const commands = {
     terremoto,
     ping,
     heart: msg => msg.reply("<#732960182459695194>"),
-    exchange
+    exchange,
+    wikisearch
 }
 
 module.exports = msg => {
