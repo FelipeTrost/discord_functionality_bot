@@ -3,11 +3,25 @@
 const axios = require("axios");
 const endpoint = "https://api.gael.cl/general/public/sismos"
 
-module.exports = msg => {
-    axios.get(endpoint)
-        .then(r => msg.reply(`Terremoto en: ${r.data[0].RefGeografica} a las ${r.data[0].Fecha.substr(11,5)} con una magnitud de ${r.data[0].Magnitud}`))
-        .catch(err => {
-            console.error(err);
-            msg.reply("Perdon, intenta mas tarde");
-        });
+const Cache = require("../utils/cache");
+const cache = new Cache(1000*60);
+
+module.exports = async msg => {
+    try{
+        const cachedData = cache.get("earthquake");
+        if(cachedData){
+            msg.reply(cachedData);
+        }
+        else{
+            const apiResonse = await axios.get(endpoint);
+            const message = `Terremoto en: ${apiResonse.data[0].RefGeografica} a las ${apiResonse.data[0].Fecha.substr(11,5)} con una magnitud de ${apiResonse.data[0].Magnitud}`
+
+            cache.cache("earthquake", message)
+            msg.reply(message);
+        }
+
+    }catch(error){
+        msg.reply("Perdon, intenta mas tarde");
+        console.error(error);
+    }
 }
